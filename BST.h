@@ -48,4 +48,6 @@ public:
     ~BST();
 };
 
+#include "BST.cpp"
+
 #endif //BST_BST_H
