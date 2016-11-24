@@ -2,7 +2,7 @@
 #include "BST.h"
 
 int main() {
-    BST <int>b;
+    BST<int> b;
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
