@@ -13,8 +13,8 @@ public:
     BSTNode();
     BSTNode(type &data);
 
-    void setLeftChild(BSTNode &*lc);
-    void setRightChild(BSTNode &*rc);
+    void setLeftChild(BSTNode *lc);
+    void setRightChild(BSTNode *rc);
     void setData(type &data);
 
     BSTNode *getLeftChild();
@@ -31,7 +31,11 @@ private:
 template <class type> class BST
 {
 private:
-    BSTNode *root;
+    BSTNode<type> *root;
+
+    void printPreOrder(BSTNode<type> *root);
+    void printInOrder(BSTNode<type> *root);
+    void printPostOrder(BSTNode<type> *root);
 
 public:
     BST();
@@ -43,6 +47,5 @@ public:
 
     ~BST();
 };
-
 
 #endif //BST_BST_H
