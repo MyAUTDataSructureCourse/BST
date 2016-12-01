@@ -5,24 +5,16 @@
 #ifndef BST_BST_H
 #define BST_BST_H
 
+#include <ostream>
+
 #define nullptr 0
 
-template <class type> class BSTNode
+template <class type> struct BSTNode
 {
 public:
     BSTNode();
     BSTNode(type &data);
 
-    void setLeftChild(BSTNode *lc);
-    void setRightChild(BSTNode *rc);
-    void setData(type &data);
-
-    BSTNode *getLeftChild();
-    BSTNode *getRightChild();
-    type *getData(type *dataPointer);
-
-    type getData();
-private:
     type data;
     BSTNode *leftChild;
     BSTNode *rightChild;
@@ -33,17 +25,18 @@ template <class type> class BST
 private:
     BSTNode<type> *root;
 
-    void printPreOrder(BSTNode<type> *root);
-    void printInOrder(BSTNode<type> *root);
-    void printPostOrder(BSTNode<type> *root);
+    void printPreOrder(BSTNode<type> *root, std::ostream &cout);
+    void printInOrder(BSTNode<type> *root, std::ostream &cout);
+    void printPostOrder(BSTNode<type> *root, std::ostream &cout);
+    void addHelper(BSTNode<type> *root, BSTNode<type> *node);
 
 public:
     BST();
 
-    void add(type &data);
-    void printPreOrder();
-    void printInOrder();
-    void printPostOrder();
+    void add(type data);
+    void printPreOrder(std::ostream &cout);
+    void printInOrder(std::ostream &cout);
+    void printPostOrder(std::ostream &cout);
 
     ~BST();
 };
