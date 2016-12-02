@@ -9,6 +9,13 @@
 
 #define nullptr 0
 
+/**
+ * For controlling whether which implementation(recursive or non) be used in code
+ */
+#define BST_ADD_RECURSIVE_IMPLEMENTATION
+#define BST_TRAVERSAL_RECURSIVE_IMPLEMENTATION
+
+
 template <class type> struct BSTNode
 {
 public:
@@ -29,6 +36,7 @@ private:
     void printInOrder(BSTNode<type> *root, std::ostream &cout);
     void printPostOrder(BSTNode<type> *root, std::ostream &cout);
     void addHelper(BSTNode<type> *root, BSTNode<type> *node);
+    void deleteTree(BSTNode<type> *root);
 
 public:
     BST();
