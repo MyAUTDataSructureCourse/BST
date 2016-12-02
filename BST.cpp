@@ -4,6 +4,10 @@
 
 #include "BST.h"
 
+#ifndef BST_TRAVERSAL_RECURSIVE_IMPLEMENTATION
+#include <stack>
+#endif
+
 //////////////////////////////////////////////////
 ///  Function Implementaoin of BSTNode class  ////
 //////////////////////////////////////////////////
@@ -29,7 +33,7 @@ template <class type> BSTNode<type>::BSTNode(type &data)
  * If want to add the nodes to the tree with recursive implementation
  * @tparam type
  */
-//#define BST_ADD_RECURSIVE_IMPLEMENTATION
+
 
 template <class type> BST<type>::BST()
 {
@@ -71,7 +75,7 @@ template <class type> void BST<type>::add(type data)
             parent = pointer;
             if(data > pointer->data){
                 pointer = (pointer->rightChild);
-            } else if(data < pointer->data){
+            } else if(data <= pointer->data){
                 pointer = (pointer->leftChild);
             }else{
                 // TODO something for handling if two nodes have equal data
@@ -79,7 +83,7 @@ template <class type> void BST<type>::add(type data)
                 return;
             }
         }
-        if(data < parent->data){
+        if(data <= parent->data){
             parent->leftChild = newNode;
         } else if(data > parent->data) {
             parent->rightChild = newNode;
@@ -89,22 +93,110 @@ template <class type> void BST<type>::add(type data)
     }
 #endif
 }
+template <class type> void BST<type>::deleteTree(BSTNode<type> *root)
+{
+    if (root == nullptr)
+        return;
 
+    deleteTree(root->leftChild);
+    deleteTree(root->rightChild);
+    delete root;
+}
 template <class type> BST<type>::~BST()
 {
-    // Todo design an algorithm to free the memory
+    deleteTree(this->root);
 }
 template <class type> void BST<type>::printPreOrder(std::ostream &cout)
 {
+#ifdef BST_TRAVERSAL_RECURSIVE_IMPLEMENTATION
     this->printPreOrder(this->root, cout);
+#else
+    std::stack<BSTNode <type>*> nodeStack;
+
+    if (this->root)
+    {
+        nodeStack.push(this->root);
+
+        while (! nodeStack.empty())
+        {
+            BSTNode<type> *node = nodeStack.top();
+            cout << node->data << "\n";
+            nodeStack.pop();
+
+            if(node->rightChild) nodeStack.push(node->rightChild);
+            if(node->leftChild) nodeStack.push(node->leftChild);
+        }
+    }
+#endif
 }
 template <class type> void BST<type>::printInOrder(std::ostream &cout)
 {
+#ifdef BST_TRAVERSAL_RECURSIVE_IMPLEMENTATION
     this->printInOrder(this->root, cout);
+#else
+    std::stack<BSTNode <type>*> nodeStack;
+    BSTNode<type> *node = this->root;
+
+    while(true)
+    {
+        if(node)
+        {
+            nodeStack.push(node);
+            node = node->leftChild;
+        }
+        else
+        {
+            if (!nodeStack.empty())
+            {
+                node = nodeStack.top();
+                cout << node->data << "\n";
+                nodeStack.pop();
+                node = node->rightChild;
+            }
+            else
+            {
+                // Stack is empty and there is no pointer to travers so it's done
+                break;
+            }
+        }
+    }
+#endif
 }
 template <class type> void BST<type>::printPostOrder(std::ostream &cout)
 {
+#ifdef BST_TRAVERSAL_RECURSIVE_IMPLEMENTATION
     this->printPostOrder(this->root, cout);
+#else
+    if(!this->root)
+        return;
+
+    std::stack<BSTNode <type>*> nodeStack;
+    nodeStack.push(this->root);
+
+    BSTNode <type> *prev = nullptr;
+
+    while (!nodeStack.empty())
+    {
+        BSTNode <type> *current = nodeStack.top();
+        if(!prev || prev->leftChild == current || prev->rightChild == current)
+        {
+            if (current->leftChild)
+                nodeStack.push(current->leftChild);
+            else if (current->rightChild)
+                nodeStack.push(current->rightChild);
+        }
+        else if (current->leftChild == prev)
+        {
+            if (current->rightChild)
+                nodeStack.push(current->rightChild);
+        } else{
+            cout << current->data << "\n";
+            nodeStack.pop();
+        }
+
+        prev = current;
+    }
+#endif
 }
 template <class type> void BST<type>::printPreOrder(BSTNode<type> *root, std::ostream &cout)
 {
